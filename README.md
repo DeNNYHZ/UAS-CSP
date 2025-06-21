@@ -3,7 +3,7 @@
 Project UAS CSP ini merupakan sebuah dashboard/inventory management yang dibuat menggunakan Next.js, Supabase dan Tailwind CSS.
 
 
-## 👤 Demo Accounts
+## Demo Accounts
 
 ### Admin Account
 - **Username**: `deniadmin`
@@ -14,44 +14,7 @@ Project UAS CSP ini merupakan sebuah dashboard/inventory management yang dibuat 
 - **Password**: `passworduser`
 - **Permissions**: View-only access to products
 
-### General Features
-- 🔐 **Authentication & Authorization:**
-- 📊 **Dashboard:** 
-- 🏷️ **Category Management:** 
-- ⚡ **Low Stock Alerts:** 
-- 🌙 **Dark Mode:** 
-- 📱 **PWA Ready:** 
-- 🎨 **Modern UI:** 
-
-### Admin Features
-- View comprehensive dashboard statistics
-- Manage products (Create, Read, Update, Delete)
-- Create and manage product categories
-- Monitor low stock alerts
-- Access real-time analytics
-- **User Management:** View/edit users, see last login and activity logs
-- **Login History & Activity Log:** 
-
-### User Features
-- View product catalog
-- Browse products by category
-- Search and filter products
-- Responsive mobile experience
-
-### Security Features
-- Role-based access control
-- Input validation and sanitization
-- SQL injection protection
-- XSS prevention
-- Secure authentication flow
-
-## 🛠️ Tech Stack
-- **Frontend:** Next.js, React, TypeScript
-- **Styling:** Tailwind CSS, shadcn/ui components
-- **Database:** Supabase
-- **Icons:** Lucide React
-
-## ⚙️ Environment Variables
+## Environment Variables
 
 `.env` 
 ```bash
