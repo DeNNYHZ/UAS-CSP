@@ -14,6 +14,11 @@ Project UAS CSP ini merupakan sebuah dashboard/inventory management yang dibuat 
 - **Password**: `passworduser`
 - **Permissions**: View-only access to products
 
+## Locked Account
+- **Username**: `test`
+- **Password**: `testest`
+- **Permissions**: Locked Account
+
 ## Environment Variables
 
 `.env` 
