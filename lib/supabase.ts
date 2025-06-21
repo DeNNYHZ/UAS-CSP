@@ -315,22 +315,26 @@ export const signInUser = async (username: string, password: string) => {
       }
     }
 
-    const { data, error } = await supabase
+    const { data: user, error: userError } = await supabase
       .from("users")
-      .select("id, username, email, full_name, phone, role, is_locked")
+      .select("id, username, email, full_name, phone, role, is_locked, password")
       .eq("username", username.trim())
-      .eq("password", password)
       .single()
 
-    if (error || !data) {
-      await logLoginAttempt(username, false, undefined, "Invalid credentials")
+    if (userError || !user) {
+      await logLoginAttempt(username, false, undefined, "User not found")
+      return { success: false, error: "User not found" }
+    }
+
+    if (user.password !== password) {
+      await logLoginAttempt(username, false, user.id, "Invalid credentials")
       await updateFailedLoginAttempts(username, true)
 
       const updatedLockStatus = await checkUserLockStatus(username)
       if (updatedLockStatus.remainingAttempts > 0) {
         return {
           success: false,
-          error: `Invalid username or password. ${updatedLockStatus.remainingAttempts} attempt(s) remaining before account lockout.`,
+          error: `Invalid password. ${updatedLockStatus.remainingAttempts} attempt(s) remaining before account lockout.`,
           remainingAttempts: updatedLockStatus.remainingAttempts,
         }
       } else {
@@ -341,22 +345,22 @@ export const signInUser = async (username: string, password: string) => {
       }
     }
 
-    if (data.is_locked) {
-      await logLoginAttempt(username, false, data.id, "Account locked")
+    if (user.is_locked) {
+      await logLoginAttempt(username, false, user.id, "Account locked")
       return {
         success: false,
-        error: "Account is locked. Please contact admin or try again later."
+        error: "Account is locked. Please contact admin or try again later.",
       }
     }
 
-    const user: User = {
-      id: data.id,
-      username: data.username,
-      email: data.email,
-      full_name: data.full_name,
-      phone: data.phone,
-      role: data.role as "user" | "admin",
-      is_locked: data.is_locked,
+    const userSession: User = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      full_name: user.full_name,
+      phone: user.phone,
+      role: user.role as "user" | "admin",
+      is_locked: user.is_locked,
     }
 
     await updateFailedLoginAttempts(username, false)
@@ -371,7 +375,7 @@ export const signInUser = async (username: string, password: string) => {
     await logLoginAttempt(username, true, user.id)
     await logUserActivity(user.id, user.username, "LOGIN", "AUTH", user.id)
 
-    return { success: true, user }
+    return { success: true, user: userSession }
   } catch (error) {
     console.error("Sign in error:", error)
     return { success: false, error: "Authentication service unavailable" }
@@ -833,3 +837,4 @@ export const getSupabaseStatus = () => ({
   url: supabaseUrl,
   hasClient: !!supabase,
 })
+
